@@ -1,0 +1,20 @@
+name: Unzip project
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          ZIP=$(ls *.zip | head -n1)
+          unzip -q -o "$ZIP"
+          cp -r the-unknown/. .
+          rm -rf the-unknown "$ZIP"
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "Unzip project"
+          git push
